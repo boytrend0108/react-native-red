@@ -7,20 +7,24 @@ import { Image, ImageBackground, Text, View } from 'react-native';
 const TabIcon = ({ focused, source, icon, title }: any) => {
   if (focused) {
     return (
-      <ImageBackground
-        source={source}
-        className='w-full flex flex-row flex-1 items-center justify-center min-w-[112px] min-h-16 mt-4 rounded-full overflow-hidden'
-      >
-        <Image source={icon} tintColor='#151312' className='size-5' />
-        <Text className='text-secondary text-base font-semibold ml-2'>
-          {title}
-        </Text>
-      </ImageBackground>
+      <View className='w-full h-full items-center justify-center'>
+        <ImageBackground
+          source={source}
+          className='flex flex-row items-center justify-center min-w-[112px] mt-[18px] rounded-full overflow-hidden'
+          style={{ height: 60 }} // Now fits within the 60px tab bar height
+        >
+          <Image source={icon} tintColor='#151312' className='size-5' />
+
+          <Text className='text-secondary text-base font-semibold ml-2'>
+            {title}
+          </Text>
+        </ImageBackground>
+      </View>
     );
   }
 
   return (
-    <View className='size-full rounded-full mt-4 items-center justify-center'>
+    <View className='w-full h-full items-center justify-center mt-4'>
       <Image
         source={icon}
         className='size-5'
@@ -35,20 +39,22 @@ const _layout = () => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarItemStyle: {
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
         tabBarStyle: {
           backgroundColor: '#0f0d23',
           borderRadius: 50,
           marginHorizontal: 20,
-          marginBottom: 36,
-          height: 52,
+          marginBottom: 46,
+          height: 60,
           position: 'absolute',
-          overflow: 'hidden',
+          borderTopWidth: 2,
+          borderBottomWidth: 2,
+          borderLeftWidth: 2,
+          borderRightWidth: 2,
+          borderColor: '#0f0d23',
+          paddingTop: 0,
+          paddingBottom: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
         },
       }}
     >
