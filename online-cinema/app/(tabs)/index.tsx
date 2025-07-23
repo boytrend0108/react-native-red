@@ -14,7 +14,7 @@ export default function Index() {
     data,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchPopularMovies({ query: 'Star wars' }), true);
+  } = useFetch(() => fetchPopularMovies({ query: '' }), true);
 
   const renderHeader = () => (
     <View>

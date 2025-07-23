@@ -1,15 +1,20 @@
 import { icons } from '@/constants/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, TextInput, View } from 'react-native';
 
 interface Props {
-  onPress: () => void;
+  onPress?: () => void;
   placeholder?: string;
+  searchText?: string;
+  setSearchText?: (text: string) => void;
 }
 
-const SearchBar: React.FC<Props> = ({ onPress, placeholder }) => {
-  const [searchText, setSearchText] = useState('');
-
+const SearchBar: React.FC<Props> = ({
+  onPress,
+  placeholder,
+  searchText,
+  setSearchText,
+}) => {
   return (
     <View className='flex-row items-center justify-between bg-dark-200 rounded-full px-5 py-4 w-full'>
       <Image

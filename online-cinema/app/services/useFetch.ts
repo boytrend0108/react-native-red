@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useFetch = <T>(fetchFn: () => Promise<T>, autoFetch: true) => {
+export const useFetch = <T>(fetchFn: () => Promise<T>, autoFetch: boolean) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
