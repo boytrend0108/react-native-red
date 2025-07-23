@@ -5,6 +5,7 @@ import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
 import { fetchPopularMovies } from '../services/api';
+import { updateSearchCount } from '../services/appwrite';
 import { useFetch } from '../services/useFetch';
 
 const Search = () => {
@@ -19,6 +20,8 @@ const Search = () => {
   } = useFetch(() => fetchPopularMovies({ query: query }), false);
 
   useEffect(() => {
+    updateSearchCount(query, data?.results[0]); // Placeholder movie object for search count update
+
     const timeoutId = setTimeout(async () => {
       if (query.trim()) {
         await loadMovies();
