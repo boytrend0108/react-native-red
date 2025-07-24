@@ -14,16 +14,31 @@ const database = new Databases(client);
 
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
-  console.log(">>>>>>>>>>>>", query);
-
+  console.log(">>>>>>>>>>>> updateSearchCount", movie);
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.equal("searchTemr", query),
+      Query.equal("searchTerm", query),
     ]);
 
-    console.log(">>>>>>>>>>>>", result);
+
+    if (result.documents.length > 0) {
+      const existingMovie = result.documents[0];
+
+      await database.updateDocument(DATABASE_ID, COLLECTION_ID, existingMovie.$id, {
+        count: existingMovie.count + 1,
+      });
+    } else {
+      await database.createDocument(DATABASE_ID, COLLECTION_ID, 'unique()', {
+        searchTerm: query,
+        count: 1,
+        title: movie.title,
+        movie_id: movie.id, // Assuming movie has an id property
+        poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+      });
+    }
   } catch (error) {
     console.error("Error fetching search count:", error);
+    throw error;
   }
 
 }

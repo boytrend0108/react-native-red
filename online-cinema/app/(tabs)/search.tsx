@@ -20,14 +20,19 @@ const Search = () => {
   } = useFetch(() => fetchPopularMovies({ query: query }), false);
 
   useEffect(() => {
-    updateSearchCount(query, data?.results[0]); // Placeholder movie object for search count update
-
     const timeoutId = setTimeout(async () => {
       if (query.trim()) {
         await loadMovies();
+
+        if (data.results.length > 0 && data.results[0]) {
+          // console.log('>>>>>>>>>>>> seach page', data.results[0]);
+          const movie = data.results[0];
+          updateSearchCount(query, movie);
+        }
       } else {
         reset();
       }
+      ``;
     }, 500);
 
     return () => clearTimeout(timeoutId);

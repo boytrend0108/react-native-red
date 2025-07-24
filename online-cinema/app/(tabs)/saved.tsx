@@ -10,5 +10,3 @@ const saved = () => {
 };
 
 export default saved;
-
-const styles = StyleSheet.create({});
