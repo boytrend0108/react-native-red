@@ -1,59 +1,106 @@
 import { icons } from '@/constants/icons';
 import { images } from '@/constants/images';
 import { useRouter } from 'expo-router';
-import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
+import TrendingCart from '../components/TrendingCart';
 import { fetchPopularMovies } from '../services/api';
+import { getTrendingMovies } from '../services/appwrite';
 import { useFetch } from '../services/useFetch';
 
 export default function Index() {
   const router = useRouter();
 
   const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(getTrendingMovies, true);
+
+  console.log('Trending movies:', trendingMovies);
+
+  const {
     data,
     loading: moviesLoading,
     error: moviesError,
   } = useFetch(() => fetchPopularMovies({ query: '' }), true);
-  console.log('data', data?.results);
 
   return (
-    <View className='flex-1 items-center justify-center bg-primary'>
+    <View className='flex-1 items-center justify-start bg-primary'>
       <Image source={images.bg} className='absolute w-full h-full z-0' />
 
       <View>
         <Image source={icons.logo} className='w-12 h-10 mb-20 mt-10 mx-auto' />
         <SearchBar onPress={() => router.push('/search')} />
-        <Text className='text-lg text-white font-bold mt-5 mb-3'>
-          Latest movies
-        </Text>
       </View>
 
-      {moviesLoading ? (
+      {moviesLoading || trendingLoading ? (
         <ActivityIndicator
           size='large'
           color='#0000ff'
           className='mt-10 self-center'
         />
-      ) : moviesError ? (
+      ) : moviesError || trendingError ? (
         <View className='flex-1 px-5 justify-center'>
-          <Text className='text-white'>Error: {moviesError?.message}</Text>
+          <Text className='text-white'>
+            Error: {moviesError?.message || trendingError?.message}
+          </Text>
         </View>
       ) : (
-        <FlatList
-          className='flex-1 w-full px-5'
-          data={data?.results || []}
-          renderItem={({ item }) => <MovieCard movie={item as Movie} />}
+        <ScrollView
+          className='flex-1 w-full'
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={3}
-          columnWrapperStyle={{
-            justifyContent: 'space-between',
-            marginBottom: 15,
-            gap: 10,
-          }}
-        />
+        >
+          {trendingMovies && (
+            <View className='w-full px-5'>
+              <Text className='text-lg text-white font-bold mt-5 mb-3'>
+                Trending movies
+              </Text>
+
+              <FlatList
+                horizontal
+                ItemSeparatorComponent={() => <View className='w-4' />}
+                className='w-full'
+                data={trendingMovies || []}
+                renderItem={({ item, index }) => (
+                  <TrendingCart movie={item} index={index} />
+                )}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          )}
+
+          <View className='w-full px-5'>
+            <Text className='text-lg text-white font-bold mt-5 mb-3'>
+              Latest movies
+            </Text>
+
+            <FlatList
+              className='w-full'
+              data={data}
+              renderItem={({ item }) => <MovieCard movie={item as Movie} />}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={3}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 15,
+                gap: 10,
+              }}
+            />
+          </View>
+        </ScrollView>
       )}
     </View>
   );

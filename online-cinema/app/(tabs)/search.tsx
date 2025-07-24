@@ -23,20 +23,20 @@ const Search = () => {
     const timeoutId = setTimeout(async () => {
       if (query.trim()) {
         await loadMovies();
-
-        if (data.results.length > 0 && data.results[0]) {
-          // console.log('>>>>>>>>>>>> seach page', data.results[0]);
-          const movie = data.results[0];
-          updateSearchCount(query, movie);
-        }
       } else {
         reset();
       }
-      ``;
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
   }, [query]);
+
+  useEffect(() => {
+    if (data?.length > 0 && data[0]) {
+      const movie = data[0];
+      updateSearchCount(query, movie);
+    }
+  }, [data]);
 
   const renderHeader = () => {
     return (
@@ -72,7 +72,7 @@ const Search = () => {
 
       <FlatList
         className='flex-1 px-5 w-full'
-        data={moviesLoading ? [] : data?.results || []}
+        data={moviesLoading ? [] : data || []}
         renderItem={({ item }) => <MovieCard movie={item as Movie} />}
         ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}

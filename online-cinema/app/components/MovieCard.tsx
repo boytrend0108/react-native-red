@@ -10,7 +10,6 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie }: MovieCardProps) => {
   const { id, title, poster_path, release_date, vote_average } = movie;
-  console.log('MovieCard', movie.title);
 
   return (
     <Link href={`/movie/${id}`} className='flex-1 rounded-lg' asChild>

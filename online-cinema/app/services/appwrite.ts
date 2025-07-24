@@ -1,4 +1,4 @@
-import { Client, Databases, Query } from "appwrite";
+import { Client, Databases, ID, Query } from "appwrite";
 
 // track the searches made by the user
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -14,7 +14,6 @@ const database = new Databases(client);
 
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
-  console.log(">>>>>>>>>>>> updateSearchCount", movie);
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.equal("searchTerm", query),
@@ -28,7 +27,7 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         count: existingMovie.count + 1,
       });
     } else {
-      await database.createDocument(DATABASE_ID, COLLECTION_ID, 'unique()', {
+      await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
         count: 1,
         title: movie.title,
