@@ -15,20 +15,19 @@ export default function Index() {
     loading: moviesLoading,
     error: moviesError,
   } = useFetch(() => fetchPopularMovies({ query: '' }), true);
-
-  const renderHeader = () => (
-    <View>
-      <Image source={icons.logo} className='w-12 h-10 mb-20 mt-10 mx-auto' />
-      <SearchBar onPress={() => router.push('/search')} />
-      <Text className='text-lg text-white font-bold mt-5 mb-3'>
-        Latest movies
-      </Text>
-    </View>
-  );
+  console.log('data', data?.results);
 
   return (
     <View className='flex-1 items-center justify-center bg-primary'>
       <Image source={images.bg} className='absolute w-full h-full z-0' />
+
+      <View>
+        <Image source={icons.logo} className='w-12 h-10 mb-20 mt-10 mx-auto' />
+        <SearchBar onPress={() => router.push('/search')} />
+        <Text className='text-lg text-white font-bold mt-5 mb-3'>
+          Latest movies
+        </Text>
+      </View>
 
       {moviesLoading ? (
         <ActivityIndicator
@@ -42,10 +41,9 @@ export default function Index() {
         </View>
       ) : (
         <FlatList
-          className='flex-1 px-5'
+          className='flex-1 w-full px-5'
           data={data?.results || []}
           renderItem={({ item }) => <MovieCard movie={item as Movie} />}
-          ListHeaderComponent={renderHeader}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
           keyExtractor={(item) => item.id.toString()}
