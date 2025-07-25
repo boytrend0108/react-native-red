@@ -25,8 +25,6 @@ export default function Index() {
     error: trendingError,
   } = useFetch(getTrendingMovies, true);
 
-  console.log('Trending movies:', trendingMovies);
-
   const {
     data,
     loading: moviesLoading,
@@ -38,7 +36,7 @@ export default function Index() {
       <Image source={images.bg} className='absolute w-full h-full z-0' />
 
       <View>
-        <Image source={icons.logo} className='w-12 h-10 mb-20 mt-10 mx-auto' />
+        <Image source={icons.logo} className='w-12 h-10 mb-10 mt-10 mx-auto' />
         <SearchBar onPress={() => router.push('/search')} />
       </View>
 
